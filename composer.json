@@ -1,0 +1,15 @@
+{
+  "name": "ts160876/web-engineering-sbs",
+  "autoload": {
+    "psr-4": {
+      "Bukubuku\\": "./"
+    }
+  },
+  "authors": [
+    {
+      "name": "Thorsten Schneider",
+      "email": "mr.thorsten.schneider@outlook.com"
+    }
+  ],
+  "require": {}
+}
