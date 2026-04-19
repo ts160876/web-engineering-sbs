@@ -1,5 +1,5 @@
 <?php
-$this->title = 'Error';
+$this->title = 'Registration';
 ?>
 
 <h1><?= htmlspecialchars($this->title) ?></h1>

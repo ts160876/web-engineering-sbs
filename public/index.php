@@ -5,6 +5,7 @@
  */
 
 use Bukubuku\Core\Application;
+use Bukubuku\Controllers\SiteController;
 
 //Ensure that errors are propagated to help with troubleshooting.
 ini_set('display_errors', 1);
@@ -18,8 +19,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $application = new Application(dirname(__DIR__));
 
 //Register routes.
-$application->router->registerGet('/', 'home');
-$application->router->registerGet('/contact', 'contact');
+$application->router->registerGet('/', [SiteController::class, 'home']);
+$application->router->registerGet('/contact', [SiteController::class, 'contact']);
+
+$application->router->registerGet('/registration', 'registration');
+$application->router->registerGet('/login', 'login');
+
 $application->router->registerGet('/users/create', 'users/create');
 $application->router->registerGet('/users/edit', 'users/edit');
 $application->router->registerGet('/users/list', 'users/list');
