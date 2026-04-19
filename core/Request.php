@@ -33,4 +33,25 @@ class Request
     {
         return $_SERVER['SCRIPT_NAME'];
     }
+
+    public function getParameters(): array
+    {
+        $parameters = [];
+
+        if ($this->getRequestMethod() === 'GET') {
+            foreach ($_GET as $key => $value) {
+                $parameters[$key] = filter_input(INPUT_GET, $key);
+            }
+        } else {
+            foreach ($_POST as $key => $value) {
+                $parameters[$key] = filter_input(INPUT_POST, $key);
+            }
+        }
+        return $parameters;
+    }
+
+    public function getParameter($key): mixed
+    {
+        return $this->getParameters()[$key] ?? null;
+    }
 }

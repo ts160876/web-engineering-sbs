@@ -21,6 +21,7 @@ $application = new Application(dirname(__DIR__));
 //Register routes.
 $application->router->registerGet('/', [SiteController::class, 'home']);
 $application->router->registerGet('/contact', [SiteController::class, 'contact']);
+$application->router->registerPost('/contact', [SiteController::class, 'handleContact']);
 
 $application->router->registerGet('/registration', 'registration');
 $application->router->registerGet('/login', 'login');
