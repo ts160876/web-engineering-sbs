@@ -12,12 +12,12 @@ abstract class Model
 
     static public function getPropertyNames(): array
     {
-        return []; //TODO
+        return array_keys(static::propertyMapping());
     }
 
     static public function getLabel($property): string
     {
-        return ''; //TODO
+        return static::propertyMapping()[$property] ?? $property;
     }
 
     static public function fromHttp(array $data)
@@ -25,6 +25,21 @@ abstract class Model
         return new static($data['properties'] ?? [], $data['errors'] ?? []);
     }
 
+    public function toHttp(): array
+    {
+
+        $propertyNames = self::getPropertyNames();
+        $properties = [];
+
+        foreach ($propertyNames as $propertyName) {
+            $properties[$propertyName] = $this->{$propertyName};
+        }
+
+        return [
+            'properties' => $properties,
+            'errors' => $this->errors
+        ];
+    }
 
     protected function __construct(array $properties = [], array $errors = [])
     {

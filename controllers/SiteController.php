@@ -10,10 +10,11 @@ class SiteController extends Controller
 {
     public function contact(): string
     {
-        return $this->renderView('contact');
+        $contact = Contact::fromHttp(Application::$app->getFlashMemory(Contact::class) ?? []);
+        return $this->renderView('contact', ['model' => $contact]);
     }
 
-    public function handleContact(): string
+    public function handleContact(): string|null
     {
         //Get the data from the (POST) request.
         $contact = Contact::fromHttp(
@@ -25,16 +26,22 @@ class SiteController extends Controller
             if ($contact->process() == true) {
                 //Context requests was successful.
                 //TODO
-                return 'We will contact you soon';
+                Application::$app->setFlashSuccessMessage('We will contact you soon');
+                Application::$app->response->redirect('/');
+                return null;
             } else {
                 //Contact request was not successful.
                 //TODO
-                return 'We will NOT contact you';
+                Application::$app->setFlashErrorMessage('We will NOT contact you');
+                Application::$app->response->redirect('/');
+                return null;
             }
         } else {
             //Validation has errors.
-            //TODO
-            return json_encode($contact->errors);
+            Application::$app->setFlashErrorMessage('The form has errors. Please correct them.');
+            Application::$app->setFlashMemory(Contact::class, $contact->toHttp());
+            Application::$app->response->redirect('/contact');
+            return null;
         }
     }
 

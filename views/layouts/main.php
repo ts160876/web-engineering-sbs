@@ -1,3 +1,7 @@
+<?php
+
+use Bukubuku\Core\Application;
+?>
 <!DOCTYPE html>
 <html lang="en-US">
 
@@ -46,6 +50,15 @@
             </div>
         </div>
     </nav>
+
+    <!-- Here we display the flash messages. -->
+    <div class="container">
+        <?php if (Application::$app->session->getFlashMemory('success')): ?>
+            <div class="alert alert-success"><?= htmlspecialchars(Application::$app->session->getFlashMemory('success')) ?></div>
+        <?php elseif (Application::$app->session->getFlashMemory('error')): ?>
+            <div class="alert alert-danger"><?= htmlspecialchars(Application::$app->session->getFlashMemory('error')) ?></div>
+        <?php endif; ?>
+    </div>
 
     <!-- This is the placeholder where the content of the view is injected. -->
     <div class="container">
