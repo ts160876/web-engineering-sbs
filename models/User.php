@@ -4,7 +4,7 @@ namespace Bukubuku\Models;
 
 use Bukubuku\Core\DatabaseModel;
 use Bukubuku\Core\Rule;
-
+use Bukubuku\Core\RuleParameter;
 
 class User extends DatabaseModel
 {
@@ -16,6 +16,8 @@ class User extends DatabaseModel
     public string $password = '';
     //The UI needs a second field to confirm the password.
     public string $confirmPassword = '';
+    //The database needs to store the password hash.
+    public string $hashedPassword = '';
     //And a boolean is treated as TINYINT by MySQL.
     public int $isAdmin = 0;
 
@@ -36,7 +38,7 @@ class User extends DatabaseModel
             'first_name' => 'firstName',
             'last_name' => 'lastName',
             'email' => 'email',
-            'pwd' => 'password',
+            'pwd' => 'hashedPassword',
             'is_admin' => 'isAdmin',
         ];
     }
@@ -45,20 +47,28 @@ class User extends DatabaseModel
     {
         return [
             'firstName' => [
-                Rule::REQUIRED => []
+                Rule::REQUIRED => [],
+                Rule::MAX_LENGTH => [RuleParameter::MAX => 100]
             ],
             'lastName' => [
-                Rule::REQUIRED => []
+                Rule::REQUIRED => [],
+                Rule::MAX_LENGTH => [RuleParameter::MAX => 100]
             ],
             'email' => [
                 Rule::REQUIRED => [],
-                Rule::EMAIL => []
+                Rule::MAX_LENGTH => [RuleParameter::MAX => 100],
+                Rule::EMAIL => [],
+                Rule::UNIQUE => []
             ],
             'password' => [
-                Rule::REQUIRED => []
+                Rule::REQUIRED => [],
+                //To allow easier testing, we allow very short passwords.
+                Rule::MIN_LENGTH => [RuleParameter::MIN => 3],
+                Rule::MAX_LENGTH => [RuleParameter::MAX => 100]
             ],
             'confirmPassword' => [
-                Rule::REQUIRED => []
+                Rule::REQUIRED => [],
+                Rule::MATCH => [RuleParameter::MATCH => 'password']
             ]
         ];
     }
@@ -74,5 +84,36 @@ class User extends DatabaseModel
             'confirmPassword' => 'Confirm Password',
             'isAdmin' => 'User Role'
         ];
+    }
+
+    static public function getIsAdminDropdown(): array
+    {
+        return [
+            0 => 'Customer',
+            1 => 'Administrator'
+        ];
+    }
+
+    public function insert(): bool
+    {
+        //We need to hash the password.
+        $this->hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
+        return parent::insert();
+    }
+
+    public function update(array $properties = []): bool
+    {
+        //We need to hash the password.
+        $this->hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
+        return parent::update($properties);
+    }
+
+    public function checkPassword($password): bool
+    {
+        if (password_verify($password, $this->hashedPassword)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

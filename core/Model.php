@@ -81,6 +81,21 @@ abstract class Model
                             $this->addError($property, 'This field must be a valid e-mail.');
                         }
                         break;
+                    case Rule::MIN_LENGTH;
+                        if (strlen($value) < $parameters[RuleParameter::MIN]) {
+                            $this->addError($property, 'The value is too short.');
+                        }
+                        break;
+                    case Rule::MAX_LENGTH;
+                        if (strlen($value) > $parameters[RuleParameter::MAX]) {
+                            $this->addError($property, 'The value is too long.');
+                        }
+                        break;
+                    case Rule::MATCH:
+                        if ($value !== $this->{$parameters[RuleParameter::MATCH]}) {
+                            $this->addError($property, 'The value does not match.');
+                        }
+                        break;
                 }
             }
         }

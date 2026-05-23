@@ -48,4 +48,10 @@ class Form
         $textarea = new Textarea($propertyName, $this, $readonly);
         return $textarea;
     }
+
+    public function dropdownField(string $propertyName, array $options, bool $readonly = false): DropdownField
+    {
+        $dropdownField = new DropdownField($propertyName, $options, $this, $readonly);
+        return $dropdownField;
+    }
 }

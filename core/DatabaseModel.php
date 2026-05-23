@@ -212,4 +212,27 @@ abstract class DatabaseModel extends Model
         $statement->execute();
         return !$statement->fetchColumn();
     }
+
+    public function validateData(): bool
+    {
+        //First call the validations implemented in the Model class.
+        parent::validateData();
+
+        $rulesets = static::getRulesets();
+
+        foreach ($rulesets as $property => $rules) {
+            foreach ($rules as $ruleName => $parameters) {
+                switch ($ruleName) {
+                    case Rule::UNIQUE:
+                        if ($this->isUnique($property) != true) {
+                            $this->addError($property, 'Value already exists.');
+                        }
+                        break;
+                }
+            }
+        }
+
+        //Check if errors exist.
+        return !$this->hasError();
+    }
 }
