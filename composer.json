@@ -11,5 +11,7 @@
       "email": "mr.thorsten.schneider@outlook.com"
     }
   ],
-  "require": {}
+  "require": {
+    "vlucas/phpdotenv": "^5.6"
+  }
 }
