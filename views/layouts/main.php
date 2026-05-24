@@ -31,7 +31,6 @@ use Bukubuku\Core\Application;
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="/web-engineering-sbs/public/index.php/users/create">Create User</a></li>
-                            <li><a class="dropdown-item" href="/web-engineering-sbs/public/index.php/users/edit">Edit User</a></li>
                             <li><a class="dropdown-item" href="/web-engineering-sbs/public/index.php/users/list">List Users</a></li>
                         </ul>
                     </li>

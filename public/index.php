@@ -38,7 +38,8 @@ $application->router->registerGet('/login', 'login');
 
 $application->router->registerGet('/users/create', [UserController::class, 'create']);
 $application->router->registerPost('/users/create', [UserController::class, 'handleCreate']);
-$application->router->registerGet('/users/edit', 'users/edit');
-$application->router->registerGet('/users/list', 'users/list');
+$application->router->registerGet('/users/edit', [UserController::class, 'edit']);
+$application->router->registerPost('/users/edit', [UserController::class, 'handleEdit']);
+$application->router->registerGet('/users/list', [UserController::class, 'list']);
 
 $application->run();
