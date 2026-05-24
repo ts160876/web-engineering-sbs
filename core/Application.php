@@ -2,6 +2,8 @@
 
 namespace Bukubuku\Core;
 
+use Bukubuku\Models\User;
+
 class Application
 {
     static public Application $app;
@@ -68,5 +70,44 @@ class Application
     public function getFlashErrorMessage(): string
     {
         return $this->session->getFlashMemory('error');
+    }
+
+    //Login the user.
+    public function login(int $userId)
+    {
+        $this->session->login($userId);
+    }
+
+    //Logout the user.
+    public function logout()
+    {
+        $this->session->logout();
+    }
+
+    //Get the ID of the (logged in) user.
+    public function getUserId(): int|null
+    {
+        return $this->session->get('userId');
+    }
+
+    //Is the user a guest?
+    public function isGuest(): bool
+    {
+        if ($this->getUserId() == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Get the full name of the (logged in) user.
+    public function getFullName(): string
+    {
+        if (!$this->isGuest()) {
+            $user = User::fromDatabase(Application::$app->getUserId());
+            return $user->getFullName();
+        } else {
+            return '';
+        }
     }
 }

@@ -116,4 +116,33 @@ class User extends DatabaseModel
             return false;
         }
     }
+
+    static public function checkLogin(string $email, string $password): bool
+    {
+        $userId = User::getUserIdByEmail($email);
+        if ($userId != 0) {
+            $user = User::fromDatabase($userId);
+            return $user->checkPassword($password);
+        } else {
+            return false;
+        }
+    }
+
+    static public function getUserIdByEmail(string $email): int
+    {
+        //Create SQL statement
+        $query = "SELECT user_id FROM users WHERE email = :email;";
+        $statement = static::prepare($query);
+        //Bind the parameter and execute the statement.
+        //$statement->bindValue();
+        $statement->execute([':email' => $email]);
+        $x = $statement->fetchColumn();
+        return $x;
+    }
+
+    //Get the fullname. 
+    public function getFullName(): string
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
 }

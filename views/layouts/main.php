@@ -43,7 +43,11 @@ use Bukubuku\Core\Application;
                         <a class="nav-link active" aria-current="page" href="/web-engineering-sbs/public/index.php/registration">Registration</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/web-engineering-sbs/public/index.php/login">Login</a>
+                        <?php if (Application::$app->isGuest()): ?>
+                            <a class="nav-link active" aria-current="page" href="/web-engineering-sbs/public/index.php/login">Login</a>
+                        <?php else: ?>
+                            <a class="nav-link active" aria-current="page" href="/web-engineering-sbs/public/index.php/logout"><?= 'Logout (' . Application::$app->getFullName() . ')' ?></a>
+                        <?php endif; ?>
                     </li>
                 </ul>
             </div>

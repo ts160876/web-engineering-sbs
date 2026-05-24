@@ -34,7 +34,9 @@ $application->router->registerGet('/contact', [SiteController::class, 'contact']
 $application->router->registerPost('/contact', [SiteController::class, 'handleContact']);
 
 $application->router->registerGet('/registration', 'registration');
-$application->router->registerGet('/login', 'login');
+$application->router->registerGet('/login', [SiteController::class, 'login']);
+$application->router->registerPost('/login', [SiteController::class, 'handleLogin']);
+$application->router->registerGet('/logout', [SiteController::class, 'handleLogout']);
 
 $application->router->registerGet('/users/create', [UserController::class, 'create']);
 $application->router->registerPost('/users/create', [UserController::class, 'handleCreate']);

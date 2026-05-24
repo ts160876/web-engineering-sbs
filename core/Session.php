@@ -12,8 +12,8 @@ class Session
         session_start();
 
         /*The constructor of the Session class is called at the beginning of any HTTP request.
-Everything stored in the flash memory at this point of time, needs to be removed at the
-end of the HTTP request. Therefore it is marked correspondingly.*/
+        Everything stored in the flash memory at this point of time, needs to be removed at the
+        end of the HTTP request. Therefore it is marked correspondingly.*/
         $flashMemory = $_SESSION[Session::FLASH_MEMORY_KEY] ?? [];
         foreach ($flashMemory as $key => &$content) {
             $content['remove'] = true;
@@ -24,8 +24,8 @@ end of the HTTP request. Therefore it is marked correspondingly.*/
     public function __destruct()
     {
         /*The destructor of the Session class is called at the end of any HTTP request.
-    Everything which was stored in the flash memory at the beginning of the HTTP request,
-    is now removed from the flash memory. */
+        Everything which was stored in the flash memory at the beginning of the HTTP request,
+        is now removed from the flash memory. */
         $flashMemory = $_SESSION[Session::FLASH_MEMORY_KEY] ?? [];
         foreach ($flashMemory as $key => $content) {
             if ($content['remove'] == true) {
@@ -61,5 +61,20 @@ end of the HTTP request. Therefore it is marked correspondingly.*/
     public function getFlashMemory(string $key)
     {
         return $_SESSION[Session::FLASH_MEMORY_KEY][$key]['value'] ?? null;
+    }
+
+    //Login the user.
+    public function login(int $userId)
+    {
+        $this->set('userId', $userId);
+        session_regenerate_id(true);
+    }
+
+    //Logout the user.
+    public function logout()
+    {
+        $this->unset('userId');
+        session_destroy();
+        session_start();
     }
 }
